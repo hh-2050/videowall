@@ -1,0 +1,77 @@
+/* 导航栏基础样式
+ * 定义顶部导航栏的基本布局和外观
+ */
+.navbar {
+    /* 固定定位，始终显示在视口顶部 */
+    position: fixed;
+    
+    /* 定位到视口顶部右侧 */
+    top: 0;
+    right: 0;
+    
+    /* 设置内部间距
+     * 上下12px，左右24px，给按钮留出足够空间
+     */
+    padding: 12px 24px;
+    
+    /* 使用弹性布局，方便对齐内部元素 */
+    display: flex;
+    
+    /* 将内容靠右对齐 */
+    justify-content: flex-end;
+    
+    /* 垂直居中对齐 */
+    align-items: center;
+    
+    /* 确保导航栏显示在其他元素上方 */
+    z-index: 1000;
+    
+    /* 背景透明 */
+    background: none;
+    
+    /* 添加平滑过渡效果
+     * 用于显示/隐藏导航栏时的动画
+     */
+    transition: transform 0.3s;
+}
+
+/* 导航栏隐藏状态
+ * 当导航栏需要隐藏时的样式
+ */
+.navbar.hidden {
+    /* 向上平移100%，使导航栏完全隐藏到视口外 */
+    transform: translateY(-100%);
+}
+
+/* 导航栏控制按钮容器
+ * 包含所有控制按钮的容器
+ */
+.navbar-controls {
+    /* 使用弹性布局排列按钮 */
+    display: flex;
+    
+    /* 按钮之间的间距为12px */
+    gap: 12px;
+}
+
+/* 导航栏按钮基础样式
+ * 定义所有导航栏按钮的通用样式
+ */
+.btn {
+    /* 半透明背景，创造毛玻璃效果的基础 */
+    background: rgba(52, 152, 219, 0.2);
+    
+    /* 添加模糊效果，增强毛玻璃效果 */
+    backdrop-filter: blur(5px);
+    
+    /* 添加细微的边框 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 按钮悬停效果
+ * 当鼠标移到按钮上时的样式变化
+ */
+.btn:hover {
+    /* 增加背景不透明度，使按钮更明显 */
+    background: rgba(52, 152, 219, 0.4);
+} 

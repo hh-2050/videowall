@@ -1,0 +1,136 @@
+/* 全局CSS变量定义 
+ * 使用CSS变量可以方便地统一管理和修改颜色
+ * 在其他地方使用 var(--变量名) 来引用这些颜色
+ */
+:root {
+    /* 主要颜色：用于重要的UI元素，如标题、按钮等 */
+    --primary-color: #2c3e50;       
+    
+    /* 次要颜色：用于次要的UI元素，如边框、背景等 */
+    --secondary-color: #34495e;     
+    
+    /* 强调颜色：用于需要突出显示的元素，如激活状态的按钮 */
+    --accent-color: #3498db;        
+    
+    /* 文本颜色：用于所有文字内容 */
+    --text-color: #ecf0f1;          
+    
+    /* 背景颜色：整个页面的背景色 */
+    --background-color: #1a1a1a;    
+    
+    /* 容器背景色：用于视频格子等容器的背景 */
+    --container-background: #2d2d2d; 
+}
+
+/* 全局重置样式 
+ * 清除浏览器默认的内外边距，确保一致的盒模型
+ */
+* {
+    /* 移除所有元素的外边距 */
+    margin: 0;
+    
+    /* 移除所有元素的内边距 */
+    padding: 0;
+    
+    /* 使用更直观的盒模型计算方式 
+     * width和height包含padding和border
+     */
+    box-sizing: border-box;
+}
+
+/* 基础页面布局 
+ * 设置html和body的基本样式，确保页面占满整个视口
+ */
+html, body {
+    /* 确保页面占满整个视口高度 */
+    height: 100%;
+    
+    /* 禁用滚动条，防止出现不必要的滚动 
+     * 视频网格会单独处理滚动
+     */
+    overflow: hidden;  
+}
+
+/* 主体样式 
+ * 设置页面的基本外观和布局结构
+ */
+body {
+    /* 设置字体族，按优先级排列 
+     * 如果第一个字体不可用，会依次尝试后面的字体
+     */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    
+    /* 使用CSS变量设置背景色 */
+    background-color: var(--background-color);
+    
+    /* 使用CSS变量设置文字颜色 */
+    color: var(--text-color);
+    
+    /* 使用弹性布局，方便垂直排列内容 */
+    display: flex;
+    
+    /* 设置主轴方向为垂直方向 */
+    flex-direction: column;
+}
+
+/* 通用按钮样式 
+ * 定义所有按钮的基本外观
+ */
+.btn {
+    /* 设置内边距，让按钮看起来更大一些 */
+    padding: 8px 16px;
+    
+    /* 使用CSS变量设置背景色 */
+    background-color: var(--secondary-color);
+    
+    /* 使用CSS变量设置文字颜色 */
+    color: var(--text-color);
+    
+    /* 移除按钮的边框 */
+    border: none;
+    
+    /* 添加圆角效果 */
+    border-radius: 4px;
+    
+    /* 鼠标悬停时显示手型光标 */
+    cursor: pointer;
+    
+    /* 添加背景色过渡效果
+     * 当背景色改变时会平滑过渡
+     */
+    transition: background-color 0.3s;
+}
+
+/* 按钮悬停效果 
+ * 当鼠标移到按钮上时改变背景色
+ */
+.btn:hover {
+    /* 悬停时使用强调色作为背景 */
+    background-color: var(--accent-color);
+}
+
+/* 移动端适配 
+ * 当屏幕宽度小于768px时应用这些样式
+ */
+@media (max-width: 768px) {
+    /* 调整导航栏在移动端的内边距 */
+    .navbar {
+        padding: 8px 16px;
+    }
+    
+    /* 调整按钮在移动端的大小 */
+    .btn {
+        /* 减小内边距 */
+        padding: 6px 12px;
+        /* 减小字体大小 */
+        font-size: 14px;
+    }
+    
+    /* 调整视频网格在移动端的间距 */
+    .video-grid {
+        /* 减小格子之间的间距 */
+        gap: 8px;
+        /* 减小外边距 */
+        padding: 8px;
+    }
+} 

@@ -1,0 +1,589 @@
+/* 视频网格容器的基础布局设置
+ * 这是整个视频网格的最外层容器
+ * 负责控制所有视频单元格的排列方式
+ */
+.video-grid {
+    /* 使用网格布局，实现灵活的多列排列 */
+    display: grid;                
+    
+    /* 网格单元格之间的间距，提供视觉分隔 */
+    gap: 16px;                   
+    
+    /* 容器四周的内边距，避免内容贴边 */
+    padding: 16px;               
+    
+    /* 宽度设置为视口宽度，确保填满屏幕 */
+    width: 100vw;                
+    
+    /* 高度设置为视口高度，确保填满屏幕 */
+    height: 100vh;               
+    
+    /* 使用边框盒模型，让padding包含在总宽高中 */
+    box-sizing: border-box;      
+    
+    /* 允许垂直方向滚动，当内容超出时可以滚动查看 */
+    overflow-y: scroll;          
+    
+    /* 在Firefox浏览器中隐藏滚动条 */
+    scrollbar-width: none;        
+    
+    /* 在IE和Edge浏览器中隐藏滚动条 */
+    -ms-overflow-style: none;     
+    
+    /* 启用平滑滚动效果 */
+    scroll-behavior: smooth;      
+}
+
+/* 在Webkit浏览器中隐藏滚动条
+ * 适用于Chrome、Safari和Opera
+ */
+.video-grid::-webkit-scrollbar {
+    display: none;              
+}
+
+/* 通用网格布局配置
+ * 使用CSS变量动态设置列数和行数
+ * 可以通过JavaScript动态修改这些变量来改变布局
+ */
+.video-grid[class*="layout-"] {
+    /* 使用CSS变量设置列数，默认为2列 */
+    grid-template-columns: repeat(var(--cols, 2), 1fr);
+    
+    /* 行高自适应内容 */
+    grid-auto-rows: min-content;
+    
+    /* 从顶部开始排列内容 */
+    align-content: start;
+    
+    /* 设置网格间距 */
+    gap: 16px;
+    
+    /* 高度自适应 */
+    height: auto;
+    
+    /* 最小高度为视口高度 */
+    min-height: 100vh;
+}
+
+/* 横屏布局的网格配置 
+ * 分别定义2x2和3x3两种布局模式
+ */
+.video-grid.layout-2x2.landscape { --cols: 2; --rows: 2; }  /* 2行2列的网格 */
+.video-grid.layout-3x3.landscape { --cols: 3; --rows: 3; }  /* 3行3列的网格 */
+
+/* 竖屏布局的网格配置
+ * 针对竖屏视频优化的布局
+ */
+.video-grid.layout-2x2.portrait { --cols: 3; --rows: 1; }   /* 3列1行的布局 */
+.video-grid.layout-3x3.portrait { --cols: 6; --rows: 2; }   /* 6列2行的布局 */
+
+/* 视频单元格基础样式
+ * 定义每个视频格子的基本外观和行为
+ */
+.video-cell {
+    /* 使用CSS变量设置背景色 */
+    background-color: var(--container-background);
+    
+    /* 添加圆角效果，使外观更柔和 */
+    border-radius: 8px;
+    
+    /* 相对定位，作为子元素的定位参考 */
+    position: relative;
+    
+    /* 隐藏溢出内容 */
+    overflow: hidden;
+    
+    /* 鼠标样式为可点击 */
+    cursor: pointer;
+    
+    /* 使用弹性布局，便于居中内容 */
+    display: flex;
+    
+    /* 垂直居中对齐 */
+    align-items: center;
+    
+    /* 水平居中对齐 */
+    justify-content: center;
+    
+    /* 添加过渡效果，使状态变化更平滑 */
+    transition: all 0.2s ease;
+    
+    /* 占满容器宽度 */
+    width: 100%;
+    
+    /* 占满容器高度 */
+    height: 100%;
+}
+
+/* 横屏视频比例控制 */
+.video-grid.landscape .video-cell {
+    aspect-ratio: 16/9;
+}
+
+/* 竖屏视频比例控制 */
+.video-grid.portrait .video-cell {
+    aspect-ratio: 9/16;
+    width: 100%;
+    margin: 0;
+}
+
+/* 视频元素样式
+ * 控制视频播放器的外观
+ */
+.video-container video {
+    /* 占满容器 */
+    width: 100%;
+    height: 100%;
+    
+    /* 保持视频比例，避免拉伸 */
+    object-fit: contain;
+    
+    /* 设置黑色背景，避免视频加载时出现空白 */
+    background: #000;
+    
+    /* 确保视频控件在标签之下 */
+    z-index: 1;
+}
+
+/* 拖放状态样式 */
+.video-cell.dragover {
+    border: 2px dashed var(--accent-color);  /* 拖放时的边框效果 */
+    background-color: rgba(52, 152, 219, 0.1);
+    transform: scale(1.02);
+}
+
+/* 空视频单元格样式 */
+.video-cell.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);     /* 半透明背景 */
+    transition: all 0.3s;             /* 过渡效果 */
+}
+
+/* 空单元格悬停效果 */
+.video-cell.empty:hover {
+    background: rgba(0,0,0,0.4);      /* 加深背景色 */
+}
+
+/* 添加视频按钮基础样式 */
+.add-video-btn {
+    display: flex;
+    flex-direction: column;           /* 纵向排列 */
+    align-items: center;              /* 水平居中 */
+    justify-content: center;          /* 垂直居中 */
+    width: 120px;                     /* 按钮宽度 */
+    height: 120px;                    /* 按钮高度 */
+    border-radius: 50%;               /* 圆形按钮 */
+    border: 2px dashed var(--accent-color);  /* 虚线边框 */
+    background: none;                 /* 透明背景 */
+    color: var(--text-color);         /* 文字颜色 */
+    cursor: pointer;                  /* 鼠标指针 */
+    transition: all 0.3s;             /* 过渡效果 */
+}
+
+/* 添加按钮悬停效果 */
+.add-video-btn:hover {
+    background: rgba(52, 152, 219, 0.1);  /* 半透明背景 */
+    transform: scale(1.05);               /* 放大效果 */
+}
+
+/* 添加按钮号图标 */
+.add-video-btn::before {
+    content: '+';                     /* 加号符号 */
+    font-size: 3rem;                  /* 图标大小 */
+    margin-bottom: 8px;               /* 底部间距 */
+}
+
+/* 添加按钮文字 */
+.add-video-btn::after {
+    content: '添加视频';              /* 按钮文字 */
+    font-size: 1rem;                  /* 文字大小 */
+    opacity: 0.8;                     /* 文字透明度 */
+}
+
+/* 拖拽状态样式优化 */
+.video-cell.dragging {
+    opacity: 0.4;                /* 降低透明度 */
+    transform: scale(0.98);      /* 缩小效果更细微 */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);  /* 添加阴影 */
+    border: 2px solid var(--accent-color);     /* 高亮边框 */
+}
+
+/* 可置状态样式优化 */
+.video-cell.dragover {
+    border: 2px dashed var(--accent-color);
+    background-color: rgba(52, 152, 219, 0.15);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);  /* 添加发光效果 */
+}
+
+/* 添加过渡效果 */
+.video-cell {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);  /* 使用更平滑的缓动函数 */
+    transform-origin: center;     /* 确保变换以中心点为基准 */
+    will-change: transform;       /* 优化性能 */
+}
+
+/* 添加拖拽时的占位样式 */
+.video-cell.drag-placeholder {
+    background-color: rgba(52, 152, 219, 0.1);
+    border: 2px dashed rgba(52, 152, 219, 0.5);
+    box-shadow: none;
+}
+
+/* 修改标签显示样式 */
+.tag-display {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+    opacity: 0; /* 默认隐藏 */
+}
+
+/* 视频单元格悬停时显示标签 */
+.video-cell:hover .tag-display {
+    opacity: 1;
+}
+
+/* 添加模式下的标签显示样式（+号按钮） */
+.tag-display.add-mode {
+    color: rgba(255, 255, 255, 0.8);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 24px;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.tag-display.add-mode:hover {
+    color: rgba(255, 255, 255, 1);
+    transform: none;
+    background: none;
+    box-shadow: none;
+}
+
+/* 已添加标签的样式 */
+.tag-display:not(.add-mode) {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 60px;
+    text-align: center;
+}
+
+.tag-display:not(.add-mode):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 标签菜单样式优化 */
+.tag-menu {
+    /* 定位设置 */
+    position: absolute;     /* 绝对定位，相对于父元素 */
+    bottom: 48px;          /* 距离底部48像素 */
+    right: 10px;           /* 距离右侧10像素 */
+    
+    /* 背景样式 */
+    background: rgba(28, 32, 38, 0.98);  /* 深色半透明背景 */
+    backdrop-filter: blur(12px);          /* 背景模糊效果 */
+    
+    /* 外观设置 */
+    border-radius: 16px;                  /* 圆角边框 */
+    padding: 8px 0;                       /* 上下内边距8px，左右0 */
+    min-width: 160px;                     /* 最小宽度160px */
+    
+    /* 阴影效果 */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  /* 大范围柔和阴影 */
+    
+    /* 边框样式 */
+    border: 1px solid rgba(255, 255, 255, 0.1);  /* 细微的白色边框 */
+    
+    /* 层级设置 */
+    z-index: 4;                           /* 确保菜单显示在其他元素上方 */
+    
+    /* 动画原点设置 */
+    transform-origin: bottom right;        /* 从右下角开始变换 */
+    
+    /* 弹出动画 */
+    animation: menuPopup 0.2s cubic-bezier(0.4, 0, 0.2, 1);  /* 使用贝塞尔曲线实现平滑动画 */
+    
+    /* 初始状态 */
+    opacity: 0;                           /* 完全透明 */
+    visibility: hidden;                   /* 不可见 */
+    
+    /* 过渡效果 */
+    transition: opacity 0.2s ease,        /* 透明度变化过渡 */
+                visibility 0.2s ease;     /* 可见性变化过渡 */
+}
+
+/* 标签菜单可见状态 */
+.tag-menu.visible {
+    opacity: 1;       /* 完全不透明 */
+    visibility: visible;  /* 可见 */
+}
+
+/* 菜单选项样式优化 */
+.tag-menu-option {
+    /* 内部间距 */
+    padding: 10px 16px;    /* 上下10px，左右16px的内边距 */
+    
+    /* 鼠标样式 */
+    cursor: pointer;       /* 鼠标悬停时显示手型 */
+    
+    /* 文字样式 */
+    color: rgba(255, 255, 255, 0.9);  /* 略微透明的白色文字 */
+    font-size: 13px;                  /* 字体大小13像素 */
+    
+    /* 布局设置 */
+    display: flex;         /* 弹性布局 */
+    align-items: center;   /* 垂直居中对齐 */
+    gap: 10px;            /* 子元素间距10px */
+    
+    /* 过渡效果 */
+    transition: all 0.15s ease;  /* 所有属性变化时平滑过渡 */
+    
+    /* 外边距和圆角 */
+    margin: 0 4px;        /* 左右外边距4px */
+    border-radius: 8px;   /* 圆角8px */
+    
+    /* 定位 */
+    position: relative;    /* 相对定位，作为子元素的参考 */
+}
+
+/* 菜单选项悬停效果 */
+.tag-menu-option:hover {
+    /* 悬停时的背景色 */
+    background: rgba(255, 255, 255, 0.15);  /* 半透明白色背景 */
+    
+    /* 取消变换效果 */
+    transform: none;
+    
+    /* 文字颜色 */
+    color: #fff;          /* 纯白色文字 */
+}
+
+/* 弹出动画关键帧定义 */
+@keyframes menuPopup {
+    /* 动画开始状态 */
+    from {
+        opacity: 0;                /* 完全透明 */
+        transform: scale(0.95);    /* 稍微缩小 */
+    }
+    
+    /* 动画结束状态 */
+    to {
+        opacity: 1;               /* 完全不透明 */
+        transform: scale(1);      /* 原始大小 */
+    }
+}
+
+/* 新建标签选项特殊样式 */
+.tag-menu-option:first-child {
+    padding: 6px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+    font-size: 12px;  /* 减小字体大小 */
+    color: rgba(255, 255, 255, 0.7);  /* 稍微降低对比度 */
+}
+
+.tag-menu-option:first-child:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* 标签颜色指示器样式 */
+.tag-menu-option .tag-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 筛选按钮和下拉菜单样式 */
+.filter-container {
+    /* 相对定位，作为下拉菜单的参考 */
+    position: relative;
+}
+
+/* 标签下拉菜单样式 */
+.tag-dropdown {
+    /* 绝对定位 */
+    position: absolute;
+    
+    /* 位于按钮下方 */
+    top: 100%;
+    right: 0;
+    
+    /* 与按钮保持间距 */
+    margin-top: 8px;
+    
+    /* 半透明深色背景 */
+    background: rgba(40, 44, 52, 0.95);
+    
+    /* 圆角效果 */
+    border-radius: 8px;
+    
+    /* 内部间距 */
+    padding: 8px 0;
+    
+    /* 最小宽度 */
+    min-width: 160px;
+    
+    /* 添加阴影效果 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 标签选项样式 */
+.tag-option {
+    /* 内部间距 */
+    padding: 6px 16px;
+    
+    /* 鼠标样式 */
+    cursor: pointer;
+    
+    /* 弹性布局 */
+    display: flex;
+    
+    /* 垂直居中 */
+    align-items: center;
+    
+    /* 选项间距 */
+    gap: 8px;
+    
+    /* 过渡效果 */
+    transition: background-color 0.2s;
+}
+
+/* 标签选项悬停效果 */
+.tag-option:hover {
+    /* 悬停时的背景色 */
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 标签颜色指示器 */
+.tag-color {
+    /* 圆形指示器 */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    
+    /* 内联块级显示 */
+    display: inline-block;
+}
+
+/* 标签删除按钮 */
+.tag-delete {
+    /* 靠右对齐 */
+    margin-left: auto;
+    
+    /* 初始透明度 */
+    opacity: 0.6;
+    
+    /* 过渡效果 */
+    transition: opacity 0.2s;
+}
+
+/* 删除按钮悬停效果 */
+.tag-delete:hover {
+    /* 完全不透明 */
+    opacity: 1;
+}
+
+/* 隐藏元素的通用类 */
+.hidden {
+    /* 完全隐藏元素 */
+    display: none;
+}
+
+/* 视频容器样式
+ * 用于包裹视频元素的容器
+ */
+.video-container {
+    /* 绝对定位，相对于video-cell定位 */
+    position: absolute;
+    
+    /* 定位到左上角 */
+    top: 0;
+    left: 0;
+    
+    /* 占满整个单元格 */
+    width: 100%;
+    height: 100%;
+    
+    /* 默认隐藏，等待视频加载 */
+    display: none;
+}
+
+/* 标签按钮样式
+ * 用于显示和添加标签的按钮
+ */
+.tag-btn {
+    /* 绝对定位 */
+    position: absolute;
+    
+    /* 位于右上角 */
+    top: 10px;
+    right: 10px;
+    
+    /* 圆形按钮 */
+    width: 24px;
+    height: 24px;
+    
+    /* 圆角效果 */
+    border-radius: 50%;
+    
+    /* 半透明白色背景 */
+    background: rgba(255, 255, 255, 0.2);
+    
+    /* 居中显示内容 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 默认隐藏，悬停时显示 */
+    opacity: 0;
+    
+    /* 添加过渡效果 */
+    transition: all 0.2s ease;
+}
+
+/* 标签按钮悬停效果 */
+.tag-btn:hover {
+    /* 增加背景不透明度 */
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* 当视频单元格有标签时的按钮位置调整 */
+.video-cell[data-tag] .tag-btn {
+    /* 调整按钮位置到标签右侧 */
+    right: calc(100% - 10px);
+    
+    /* 水平位移 */
+    transform: translateX(100%);
+    
+    /* 与标签保持间距 */
+    margin-right: -34px;
+}
+
+/* 视频单元格悬停时显示标签按钮 */
+.video-cell:hover .tag-btn {
+    /* 显示按钮 */
+    opacity: 1;
+}

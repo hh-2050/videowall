@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!-- 设置文档类型为HTML5 -->
+
+<html lang="zh-CN">
+<!-- 设置页面语言为中文简体，帮助浏览器正确处理语言相关的功能 -->
+
+<head>
+    <!-- 字符编码设置 -->
+    <meta charset="UTF-8">
+    
+    <!-- 视口设置
+     * width=device-width：将视口宽度设置为设备宽度
+     * initial-scale=1.0：设置初始缩放比例为1
+     * 这两个设置对移动端适配很重要
+     -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 页面标题，显示在浏览器标签页上 -->
+    <title>视频网格</title>
+    
+    <!-- 样式文件引入
+     * 按照从全局到具体的顺序引入CSS文件
+     * 这样可以确保样式的正确覆盖
+     -->
+    <link rel="stylesheet" href="styles/main.css">      <!-- 全局基础样式 -->
+    <link rel="stylesheet" href="styles/video-grid.css"><!-- 视频网格专用样式 -->
+    <link rel="stylesheet" href="styles/navbar.css">    <!-- 导航栏专用样式 -->
+</head>
+
+<body>
+    <!-- 顶部导航栏
+     * 包含所有控制按钮
+     * 使用fixed定位固定在页面顶部
+     -->
+    <nav class="navbar">
+        <!-- 导航栏按钮容器
+         * 使用flex布局排列按钮
+         -->
+        <div class="navbar-controls">
+            <!-- 布局切换按钮
+             * 用于在2x2和3x3布局之间切换
+             * aria-label属性用于提升可访问性
+             -->
+            <button id="layoutToggle" class="btn" aria-label="切换布局">
+                切换布局
+            </button>
+            
+            <!-- 视频比例切换按钮
+             * 用于在16:9和9:16比例之间切换
+             -->
+            <button id="aspectToggle" class="btn">
+                切换比例
+            </button>
+            
+            <!-- 播放控制按钮
+             * 控制所有视频的播放/暂停状态
+             -->
+            <button id="playToggle" class="btn">
+                播放/暂停
+            </button>
+        </div>
+    </nav>
+    
+    <!-- 视频网格容器
+     * 主要内容区域
+     * 使用grid布局来排列视频单元格
+     * layout-2x2和landscape是初始布局类
+     -->
+    <div id="videoGrid" class="video-grid layout-2x2 landscape"></div>
+
+    <!-- JavaScript文件引入
+     * 按照依赖关系顺序引入JS文件
+     * 确保依赖的文件先加载
+     -->
+    <script src="js/config.js"></script>      <!-- 全局配置文件（最先加载） -->
+    <script src="js/VideoGrid.js"></script>   <!-- 视频网格核心组件 -->
+    <script src="js/Navbar.js"></script>      <!-- 导航栏组件 -->
+    <script src="js/TagManager.js"></script>  <!-- 标签管理组件 -->
+    <script src="js/main.js"></script>        <!-- 主程序入口（最后加载） -->
+</body>
+</html> 
